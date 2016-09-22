@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="MALMainWindow">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="500" height="400"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <toolbar id="84b11">
+        <constraints border-constraint="North"/>
+        <properties>
+          <floatable value="false"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="a6766" class="javax.swing.JButton" binding="buttonAnimeToManga">
+            <constraints/>
+            <properties>
+              <text value="Anime"/>
+            </properties>
+          </component>
+          <component id="cad29" class="javax.swing.JButton" binding="buttonReload">
+            <constraints/>
+            <properties>
+              <text value="Reload"/>
+            </properties>
+          </component>
+        </children>
+      </toolbar>
+      <scrollpane id="b57cb">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="e2319" class="javax.swing.JList" binding="listItems">
+            <constraints/>
+            <properties>
+              <selectionMode value="0"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>

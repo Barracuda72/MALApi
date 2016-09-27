@@ -43,6 +43,6 @@ public enum MALScore {
     }
 
     public String toString() {
-        return name;
+        return getName();
     }
 }

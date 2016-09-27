@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.StringTokenizer;
 
 /**
  * Created by barracuda on 20.09.16.
@@ -135,6 +136,23 @@ public abstract class MALEntry {
         this.synopsis = synopsis;
     }
 
+    private String addLinebreaks(String input, int maxLineLength) {
+        StringTokenizer tok = new StringTokenizer(input, " ");
+        StringBuilder output = new StringBuilder(input.length());
+        int lineLen = 0;
+        while (tok.hasMoreTokens()) {
+            String word = tok.nextToken();
+
+            if (lineLen + word.length() > maxLineLength) {
+                output.append("<br/>\n");
+                lineLen = 0;
+            }
+            output.append(word+" ");
+            lineLen += word.length()+1;
+        }
+        return output.toString();
+    }
+
     protected abstract String getMiscInfo();
 
     private String getBgcolor(boolean isSelected) {
@@ -150,9 +168,12 @@ public abstract class MALEntry {
                         "<i>"+myStatus.getName()+"</i><br/>"+
                         getMiscInfo()+
                         "<font color='green'>"+ myScore.getName()+"</font><br/>"+
-                        "<h7>"+new Date(lastUpdated*1000)+"</h7></body></html>";
+                        "<h7>"+new Date(lastUpdated*1000)+"</h7>"+
+                        "<br/><i>"+addLinebreaks(getSynopsis(), 200)+"</i>"
+                        +"</body></html>";
     }
 
+    public abstract String toXML();
 
     protected int id = 0;
     protected String title = "";

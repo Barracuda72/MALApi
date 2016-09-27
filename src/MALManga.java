@@ -49,8 +49,31 @@ public class MALManga extends MALEntry {
     protected String getMiscInfo()
     {
         return
-                        readChapters+"/"+chapters+
+                        readChapters+"/"+chapters+"<br/>"+
                         readVolumes+"/"+volumes+"<br/>";
+    }
+
+    public String toXML()
+    {
+        return
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+ 
+                    "<entry>"+
+					"<chapter>"+getReadChapters()+"</chapter>"+
+					"<volume>"+getReadVolumes()+"</volume>"+
+					"<status>"+getMyStatus().getCode()+"</status>"+
+					"<score>"+getMyScore().getCode()+"</score>"+
+					"<times_reread></times_reread>"+
+					"<reread_value></reread_value>"+
+					"<date_start></date_start>"+
+					"<date_finish></date_finish>"+
+					"<priority></priority>"+
+					"<enable_discussion></enable_discussion>"+
+					"<enable_rereading></enable_rereading>"+
+					"<comments></comments>"+
+					"<scan_group></scan_group>"+
+					"<tags></tags>"+
+					"<retail_volumes></retail_volumes>"+
+                    "</entry>";
     }
 
     private int chapters = 0;

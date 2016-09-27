@@ -25,6 +25,10 @@ public class ImagePool {
     }
 
     public static Image loadImage(String uri) {
+        return new BufferedImage(200, 300, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    public static Image _loadImage(String uri) {
         String hash = getHash(uri);
 
         if (cache.containsKey(hash)) {

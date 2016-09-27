@@ -2,26 +2,28 @@
  * Created by barracuda on 20.09.16.
  */
 public enum MALRunStatus {
-    UNKNOWN(0, "Unknown"),
-    ONAIR(1, "Currently Airing"),
-    FINISHED(2, "Finished Airing"),
-    NOTYET(3, "Not yet aired");
+    UNKNOWN(0, "Unknown", "Unknown"),
+    ONAIR(1, "Currently Airing", "Publishing"),
+    FINISHED(2, "Finished Airing", "Finished"),
+    NOTYET(3, "Not yet aired", "Not yet published");
 
     public int getCode() {
         return code;
     }
 
     public String getName() {
-        return name;
+        return MALSettings.isAnime()?animeName:mangaName;
     }
 
     private final int code;
-    private final String name;
+    private final String animeName;
+    private final String mangaName;
 
 
-    MALRunStatus(int code, String name) {
+    MALRunStatus(int code, String animeName, String mangaName) {
         this.code = code;
-        this.name = name;
+        this.animeName = animeName;
+        this.mangaName = mangaName;
     }
 
     public static MALRunStatus findByKey(int i) {
@@ -37,7 +39,7 @@ public enum MALRunStatus {
     public static MALRunStatus findByValue(String s) {
         MALRunStatus[] testEnums = MALRunStatus.values();
         for (MALRunStatus testEnum : testEnums) {
-            if (testEnum.name.equals(s)) {
+            if (testEnum.animeName.equals(s) || testEnum.mangaName.equals(s)) {
                 return testEnum;
             }
         }
@@ -45,6 +47,6 @@ public enum MALRunStatus {
     }
 
     public String toString() {
-        return name;
+        return getName();
     }
 }

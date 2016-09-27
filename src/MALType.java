@@ -2,16 +2,20 @@
  * Created by barracuda on 20.09.16.
  */
 public enum MALType {
-    UNKNOWN(0, "Unknown"),
-    TV(1, "TV"),
-    OVA(2, "OVA"),
-    MOVIE(3, "Movie"),
-    SPECIAL(4, "Special"),
-    ONA(5, "ONA");
+    UNKNOWN(0, "Unknown", "Unknown"),
+    TV(1, "TV", "Manga"),
+    OVA(2, "OVA", "Novel"),
+    MOVIE(3, "Movie", ""),
+    SPECIAL(4, "Special", ""),
+    ONA(5, "ONA", "");
 
-    MALType(int code, String name) {
+    private final String animeName;
+    private final String mangaName;
+
+    MALType(int code, String animeName, String mangaName) {
         this.code = code;
-        this.name = name;
+        this.animeName = animeName;
+        this.mangaName = mangaName;
     }
 
     public int getCode() {
@@ -19,11 +23,10 @@ public enum MALType {
     }
 
     public String getName() {
-        return name;
+        return MALSettings.isAnime()?animeName:mangaName;
     }
 
     private final int code;
-    private final String name;
 
     public static MALType findByKey(int i) {
         MALType[] testEnums = MALType.values();
@@ -38,7 +41,7 @@ public enum MALType {
     public static MALType findByValue(String s) {
         MALType[] testEnums = MALType.values();
         for (MALType testEnum : testEnums) {
-            if (testEnum.name.equals(s)) {
+            if (testEnum.animeName.equals(s) || testEnum.mangaName.equals(s)) {
                 return testEnum;
             }
         }
@@ -46,6 +49,6 @@ public enum MALType {
     }
 
     public String toString() {
-        return name;
+        return getName();
     }
 }

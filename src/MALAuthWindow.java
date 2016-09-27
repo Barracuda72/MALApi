@@ -1,4 +1,5 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class MALAuthWindow extends JDialog {
@@ -11,6 +12,8 @@ public class MALAuthWindow extends JDialog {
     public MALAuthWindow() {
         setContentPane(contentPane);
         setModal(true);
+        setSize(270, 110);
+        setTitle("Authentication");
         setResizable(false);
         getRootPane().setDefaultButton(buttonOK);
 
@@ -43,12 +46,33 @@ public class MALAuthWindow extends JDialog {
     }
 
     private void onOK() {
-        // add your code here
-        dispose();
+        String user = textFieldUsername.getText();
+        String pass = passwordFieldPassword.getText();
+        try {
+            MALHttp.verifyCreds(user, pass);
+            MALSettings.setUser(user);
+            MALSettings.setPassword(pass);
+            MALSettings.save();
+            hide();
+            dispose();
+            MALMainWindow.run();
+        } catch (MALException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Invalid username/password!");
+        }
     }
 
     private void onCancel() {
-        // add your code here if necessary
         dispose();
+    }
+
+    public static void main(String[] args) {
+        MALSettings.load();
+        if (MALSettings.getUser() == null) {
+            MALAuthWindow maw = new MALAuthWindow();
+            maw.show();
+        } else {
+            MALMainWindow.run();
+        }
     }
 }

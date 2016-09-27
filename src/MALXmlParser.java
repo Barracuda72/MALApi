@@ -1,4 +1,4 @@
-import java.io.File;
+import java.io.ByteArrayInputStream;
 import java.util.ArrayList;
 import java.util.List;
 import org.w3c.dom.Document;
@@ -8,7 +8,6 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 /**
  * Created by barracuda on 22.09.16.
@@ -16,13 +15,13 @@ import javax.xml.parsers.ParserConfigurationException;
 public class MALXmlParser {
     private static final DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 
-    public static List<MALEntry> parseUserList(String uri) {
+    public static List<MALEntry> parseData(String data) {
         ArrayList <MALEntry> list = new ArrayList<>();
 
         try {
             DocumentBuilder db = dbf.newDocumentBuilder();
-            Document doc = db.parse(new File(uri));
-            //visit(doc,0);
+            //Document doc = db.parse(new File(uri));
+            Document doc = db.parse(new ByteArrayInputStream(data.getBytes("UTF-8")));
 
             Node rootNode = doc.getChildNodes().item(0); // Получаем корневой элемент списка
 
@@ -31,8 +30,9 @@ public class MALXmlParser {
                 Node childNode = nl.item(i); // текущий элемент
                 if (childNode.getNodeName().equals("anime") ||
                         childNode.getNodeName().equals("manga") ||
-                        rootNode.getNodeName().equals("anime") ||
-                        rootNode.getNodeName().equals("manga"))
+                        (rootNode.getNodeName().equals("anime") ||
+                        rootNode.getNodeName().equals("manga")) &&
+                                childNode.getNodeName().equals("entry"))
                     list.add(parseNode(childNode,
                             childNode.getNodeName().equals("anime") || rootNode.getNodeName().equals("anime")));
             }
@@ -43,7 +43,21 @@ public class MALXmlParser {
         return list;
     }
 
+    public static void trimWhitespace(Node node) {
+        NodeList children = node.getChildNodes();
+        for (int i = 0; i < children.getLength(); ++i) {
+            Node child = children.item(i);
+            if (child.getNodeType() == Node.TEXT_NODE) {
+                child.setTextContent(child.getTextContent().trim());
+            }
+            trimWhitespace(child);
+        }
+    }
+
     private static MALEntry parseNode(Node node, boolean isAnime) {
+        // trim
+        //trimWhitespace(node);
+
         NodeList list = node.getChildNodes();
         MALEntry entry = null;
 
@@ -70,6 +84,8 @@ public class MALXmlParser {
         
         for (int i = 0; i < list.getLength(); i++) {
             Node childNode = list.item(i);
+            if (childNode.getNodeType() == Node.TEXT_NODE)
+                continue;
             String text = childNode.getTextContent();
             int code = 0;
             try {
@@ -87,9 +103,10 @@ public class MALXmlParser {
                     break;
 
                 case "series_title":
-                //case "title":
+                case "title":
                 case "english":
-                    title = text;
+                    if (!text.isEmpty())
+                        title = text;
                     break;
 
                 case "series_synonyms":
@@ -138,6 +155,7 @@ public class MALXmlParser {
                     break;
 
                 case "my_score":
+                case "score":
                     myScore = MALScore.findByKey(code);
                     break;
 
@@ -150,10 +168,12 @@ public class MALXmlParser {
                     break;
 
                 case "series_chapters":
+                case "chapters":
                     chapters = code;
                     break;
 
                 case "series_volumes":
+                case "volumes":
                     volumes = code;
                     break;
 
@@ -166,6 +186,7 @@ public class MALXmlParser {
                     break;
 
                 case "series_episodes":
+                case "episodes":
                     episodes = code;
                     break;
 

@@ -33,6 +33,29 @@ public class MALAnime extends MALEntry {
                 watchedEpisodes+"/"+episodes+"<br/>";
     }
 
+    public String toXML()
+    {
+        return
+                "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"+
+                        "<entry>"+
+                        "<episode >" +getWatchedEpisodes()+ "</episode >"+
+                        "<status > "+getMyStatus().getCode()+" </status >"+
+                        "<score > "+getMyScore().getCode()+" </score >"+
+                        "<storage_type ></storage_type >"+
+                        "<storage_value ></storage_value >"+
+                        "<times_rewatched ></times_rewatched >"+
+                        "<rewatch_value ></rewatch_value >"+
+                        "<date_start ></date_start >"+
+                        "<date_finish ></date_finish >"+
+                        "<priority ></priority >"+
+                        "<enable_discussion ></enable_discussion >"+
+                        "<enable_rewatching ></enable_rewatching >"+
+                        "<comments ></comments >"+
+                        "<fansub_group ></fansub_group >"+
+                        "<tags ></tags >"+
+                        "</entry>";
+    }
+
     private int episodes = 0;
     private int watchedEpisodes = 0;
 }
